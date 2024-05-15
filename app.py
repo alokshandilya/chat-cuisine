@@ -12,6 +12,7 @@ templates = Jinja2Templates(directory="templates")
 # async def root():
 #     return {"message": "Hello World"}
 
+
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
     # Render index.html template

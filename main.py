@@ -1,8 +1,6 @@
-from fastapi import FastAPI
+from uvicorn import run
+from os import getenv
 
-app = FastAPI()
-
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+if __name__ == "__main__":
+    port = int(getenv("PORT", 8000))
+    run("app:app", host="0.0.0.0", port=port, reload=True)

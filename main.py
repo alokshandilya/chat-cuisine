@@ -1,11 +1,6 @@
-from dotenv import load_dotenv
-import os
-import uvicorn
+from fastapi import FastAPI
+app = FastAPI()
 
-load_dotenv()
-
-PORT = int(os.getenv("PORT", 8000))
-HOST = "localhost"
-
-if __name__ == "__main__":
-    uvicorn.run("app:app", host=HOST, port=PORT, reload=True)
+@app.get("/")
+async def root():
+    return {"message": "Hello from FastAPI!"}

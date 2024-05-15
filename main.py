@@ -1,8 +1,11 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 import db_helper
 
 app = FastAPI()
+templates = Jinja2Templates(directory="templates")
 
 
 class WebhookRequest(BaseModel):
@@ -52,6 +55,11 @@ def track_order(params: dict, session_id: str):
             f"Sorry, no order found for order id: {order_id}"
         )
     return fullfillmentText
+
+
+@app.get("/", response_class=HTMLResponse)
+async def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 if __name__ == "__main__":

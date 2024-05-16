@@ -1,25 +1,33 @@
-import mysql.connector
-global conn
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
-# Connect to your MySQL database
-conn = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="pandeyji_eatery"
-)
+Base = declarative_base()
+
+
+# Define your OrderTracking table class
+class OrderTracking(Base):
+    __tablename__ = 'order_tracking'
+
+    order_id = Column(Integer, primary_key=True)
+    status = Column(String)
+
+
+# Create an engine
+engine = create_engine(
+    "mysql+mysqlconnector://root:@localhost/chatcuisine")
+
+# Create a session maker
+Session = sessionmaker(bind=engine)
+
 
 def get_order_status(order_id):
-    # Create a cursor object
-    cursor = conn.cursor()
+    # Create a session
+    session = Session()
 
-    # Execute the query
-    cursor.execute("SELECT status FROM order_tracking WHERE order_id = %s", (order_id,))
+    # Query the database using SQLAlchemy ORM
+    status = session.query(OrderTracking.status).filter_by(order_id=order_id).scalar()
 
-    # Fetch the status
-    status = cursor.fetchone()
+    session.close()
 
-    if status:
-        return status[0]  # Return the status value
-    else:
-        return None  # Return None if no status found
+    return status

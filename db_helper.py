@@ -1,3 +1,7 @@
+import os
+from dotenv import load_dotenv
+
+import pymysql
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -12,10 +16,26 @@ class OrderTracking(Base):
     order_id = Column(Integer, primary_key=True)
     status = Column(String)
 
+# Load environment variables from .env file
+load_dotenv()
 
-# Create an engine
+timeout = 10
+connection = pymysql.connect(
+    charset="utf8mb4",
+    connect_timeout=timeout,
+    cursorclass=pymysql.cursors.DictCursor,
+    db=os.getenv("DB_NAME"),
+    host=os.getenv("DB_HOST"),
+    password=os.getenv("DB_PASS"),
+    read_timeout=timeout,
+    port=int(os.getenv("DB_PORT")),
+    user=os.getenv("DB_USER"),
+    write_timeout=timeout,
+)
+
+# Create an engine using pymysql
 engine = create_engine(
-    "mysql+mysqlconnector://root:@localhost/chatcuisine")
+    "mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
 
 # Create a session maker
 Session = sessionmaker(bind=engine)

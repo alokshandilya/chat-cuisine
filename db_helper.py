@@ -35,7 +35,7 @@ connection = pymysql.connect(
 
 # Create an engine using pymysql
 engine = create_engine(
-    "mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
+    "mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_HOST}/{DB_NAME}")
 
 # Create a session maker
 Session = sessionmaker(bind=engine)

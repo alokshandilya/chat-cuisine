@@ -1,75 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatcuisine</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/static/css/styles.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <title>Chat Cuisine</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
-</head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">Chatcuisine</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#"
+                ><i class="fas fa-shopping-cart"></i> Cart</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#"
+                ><i class="fas fa-sign-in-alt"></i> Log In</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#"
+                ><i class="fas fa-user-plus"></i> Sign Up</a
+              >
+            </li>
+            <li class="nav-item">
+              <button class="btn btn-outline-light" id="darkModeToggle">
+                <i class="fas fa-moon"></i>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
-<body>
-  <header class="container-fluid">
-    <h1>Hello, from Chat Cuisine 🍔</h1>
-  </header>
-  <main class="container-fluid">
-    <section>
-      <h2>TODO:</h2>
-      <ul>
-        <li>Frontend</li>
-        <li>
-          Backend Integration with Bot <em>(Initial connection tested)</em>
-        </li>
-        <li>Improving database</li>
-        <li>Hosting database</li>
-        <li>Deployment <em>(Initial connection tested)</em></li>
-      </ul>
-    </section>
-    <section>
-      <h2>Completed</h2>
-      <ul>
-        <li>
-          Bot creation <em>(Intents, Entities, Fulfillment, Integration)</em>
-        </li>
-        <ul>
-          <li>
-            default fallback, welcome intent
-            <em>(with training phrases and responses)</em>
-          </li>
-          <li>
-            new.order, intent<em>(with training phrases and responses)</em>
-          </li>
-          <li>
-            order.add, order.complete, order.remove
-            <em>(context : ongoing-order)</em>
-          </li>
-        </ul>
-        <li>Backend integration with bot testing<em>(track order)</em></li>
-        <li>Phase 1 database</li>
-        <li>
-          Deployment tested on vercel, render
-          <em>(re-test after SQL deployment)</em>
-        </li>
-      </ul>
-    </section>
-  </main>
-  <footer class="container-fluid">
-    <section id="chatbot">
+    <!-- Main Content -->
+    <div class="container my-5">
+      <h1 class="text-center mb-5">Our Menu</h1>
+      <div class="row">
+        <!-- Menu Item 1 -->
+        <div class="col-md-4 menu-item">
+          <div class="card">
+            <img
+              src="https://via.placeholder.com/300"
+              class="card-img-top"
+              alt="Food Item 1"
+            />
+            <div class="card-body text-center">
+              <h5 class="card-title">Food Item 1</h5>
+              <p class="card-text">$10.00</p>
+              <a href="#" class="btn btn-primary">Order Now</a>
+            </div>
+          </div>
+        </div>
+        <!-- Menu Item 2 -->
+        <div class="col-md-4 menu-item">
+          <div class="card">
+            <img
+              src="https://via.placeholder.com/300"
+              class="card-img-top"
+              alt="Food Item 2"
+            />
+            <div class="card-body text-center">
+              <h5 class="card-title">Food Item 2</h5>
+              <p class="card-text">$12.00</p>
+              <a href="#" class="btn btn-primary">Order Now</a>
+            </div>
+          </div>
+        </div>
+        <!-- Menu Item 3 -->
+        <div class="col-md-4 menu-item">
+          <div class="card">
+            <img
+              src="https://via.placeholder.com/300"
+              class="card-img-top"
+              alt="Food Item 3"
+            />
+            <div class="card-body text-center">
+              <h5 class="card-title">Food Item 3</h5>
+              <p class="card-text">$15.00</p>
+              <a href="#" class="btn btn-primary">Order Now</a>
+            </div>
+          </div>
+        </div>
+        <!-- Menu Item 4 -->
+        <div class="col-md-4 menu-item">
+          <div class="card">
+            <img
+              src="https://via.placeholder.com/300"
+              class="card-img-top"
+              alt="Food Item 4"
+            />
+            <div class="card-body text-center">
+              <h5 class="card-title">Food Item 4</h5>
+              <p class="card-text">$8.00</p>
+              <a href="#" class="btn btn-primary">Order Now</a>
+            </div>
+          </div>
+        </div>
+        <!-- Menu Item 5 -->
+        <div class="col-md-4 menu-item">
+          <div class="card">
+            <img
+              src="https://via.placeholder.com/300"
+              class="card-img-top"
+              alt="Food Item 5"
+            />
+            <div class="card-body text-center">
+              <h5 class="card-title">Food Item 5</h5>
+              <p class="card-text">$9.00</p>
+              <a href="#" class="btn btn-primary">Order Now</a>
+            </div>
+          </div>
+        </div>
+        <!-- Menu Item 6 -->
+        <div class="col-md-4 menu-item">
+          <div class="card">
+            <img
+              src="https://via.placeholder.com/300"
+              class="card-img-top"
+              alt="Food Item 6"
+            />
+            <div class="card-body text-center">
+              <h5 class="card-title">Food Item 6</h5>
+              <p class="card-text">$11.00</p>
+              <a href="#" class="btn btn-primary">Order Now</a>
+            </div>
+          </div>
+        </div>
+        <!-- Menu Item 7 -->
+        <div class="col-md-4 menu-item">
+          <div class="card">
+            <img
+              src="https://via.placeholder.com/300"
+              class="card-img-top"
+              alt="Food Item 7"
+            />
+            <div class="card-body text-center">
+              <h5 class="card-title">Food Item 7</h5>
+              <p class="card-text">$13.00</p>
+              <a href="#" class="btn btn-primary">Order Now</a>
+            </div>
+          </div>
+        </div>
+        <!-- Menu Item 8 -->
+        <div class="col-md-4 menu-item">
+          <div class="card">
+            <img
+              src="https://via.placeholder.com/300"
+              class="card-img-top"
+              alt="Food Item 8"
+            />
+            <div class="card-body text-center">
+              <h5 class="card-title">Food Item 8</h5>
+              <p class="card-text">$14.00</p>
+              <a href="#" class="btn btn-primary">Order Now</a>
+            </div>
+          </div>
+        </div>
+        <!-- Menu Item 9 -->
+        <div class="col-md-4 menu-item">
+          <div class="card">
+            <img
+              src="https://via.placeholder.com/300"
+              class="card-img-top"
+              alt="Food Item 9"
+            />
+            <div class="card-body text-center">
+              <h5 class="card-title">Food Item 9</h5>
+              <p class="card-text">$16.00</p>
+              <a href="#" class="btn btn-primary">Order Now</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
       <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
-      <df-messenger intent="WELCOME" chat-title="Chat Cuisine Bot 🤖" agent-id="1d097414-4293-48a5-ba46-00df4a8aae1b"
-        language-code="en"></df-messenger>
-    </section>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-      crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-      integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-      crossorigin="anonymous"></script>
-  </footer>
-</body>
+      <df-messenger
+        intent="WELCOME"
+        chat-title="chat-cuisine-bot"
+        agent-id="1d097414-4293-48a5-ba46-00df4a8aae1b"
+        language-code="en"
+      ></df-messenger>
+      <div class="container text-center">
+        <p>&copy; 2024 Chatcuisine. All rights reserved.</p>
+        <p>
+          <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> |
+          <a href="#">Contact Us</a>
+        </p>
+      </div>
+    </footer>
 
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+    <script>
+      document
+        .getElementById("darkModeToggle")
+        .addEventListener("click", function () {
+          document.body.classList.toggle("dark-mode");
+        });
+    </script>
+  </body>
 </html>

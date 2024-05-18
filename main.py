@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
+from fastapi.staticfiles import StaticFiles
 import db_helper
 
 app = FastAPI()
@@ -57,6 +58,8 @@ def track_order(params: dict):
         fullfillmentText = f"Sorry, no order found for order id: {order_id}"
     return fullfillmentText
 
+# Mount the static files directory
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):

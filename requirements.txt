@@ -3,3 +3,6 @@ uvicorn
 pydantic
 mysql-connector-python
 SQLAlchemy
+
+starlette
+python-dotenv

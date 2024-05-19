@@ -4,7 +4,9 @@ from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 from pydantic import BaseModel
 from fastapi.staticfiles import StaticFiles
+from dotenv import load_dotenv
 import db_helper
+import os
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -62,7 +64,8 @@ def track_order(params: dict):
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Secret key for session management
-app.add_middleware(SessionMiddleware, secret_key="your_secret_key")
+secret_key = os.getenv("SECRET_KEY")
+app.add_middleware(SessionMiddleware, secret_key)
 
 # Mock user database
 fake_users_db = {"testuser": {"username": "testuser", "password": "testpassword"}}

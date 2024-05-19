@@ -29,8 +29,7 @@ async def webhook_handler(request: WebhookRequest):
     query_result = request.queryResult
     intent_name = query_result["intent"]["displayName"]
     session_id = (
-        query_result.get("outputContexts",
-                         [{}])[0].get("name", "").split("/")[-1]
+        query_result.get("outputContexts", [{}])[0].get("name", "").split("/")[-1]
     )
 
     if intent_name == "order.add":
@@ -58,12 +57,20 @@ def track_order(params: dict):
         fullfillmentText = f"Sorry, no order found for order id: {order_id}"
     return fullfillmentText
 
+
 # Mount the static files directory
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+
+# Serve the Google verification file
+@app.get("/google721ed54125969664.html", response_class=HTMLResponse)
+async def serve_verification_file():
+    return HTMLResponse(content="google-site-verification: google721ed54125969664.html")
 
 
 if __name__ == "__main__":

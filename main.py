@@ -76,7 +76,7 @@ def track_order(params: dict):
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-fake_users_db = {"testuser": {"username": "testuser", "password": "testpassword"}}
+fake_users_db = {"testuser": {"username": "root@root.com", "password": "rootalok"}}
 
 
 @app.get("/", response_class=HTMLResponse)

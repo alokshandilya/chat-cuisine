@@ -6,3 +6,4 @@ SQLAlchemy
 
 starlette
 python-dotenv
+itsdangerous

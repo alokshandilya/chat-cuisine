@@ -1,5 +1,8 @@
 # Version 2
 
+- username : aloks
+- password : alokkolal
+
 updated frontend
 
 ## Current Progress with Screenshots

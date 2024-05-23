@@ -1,7 +1,7 @@
 # Version 2
 
-- username : aloks
-- password : alokkolal
+- username : alok
+- password : alok
 
 updated frontend
 

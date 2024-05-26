@@ -3,6 +3,8 @@ uvicorn
 pydantic
 mysql-connector-python
 SQLAlchemy
+databases
+asyncpg
 
 starlette
 python-dotenv

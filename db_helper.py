@@ -139,8 +139,6 @@ class OrderTracking(Base):
     timestamp = Column(DateTime, server_default=func.now())
     order = relationship("Order", back_populates="tracking")
 
-# Create a session maker
-Session = sessionmaker(bind=engine)
 
 # Create all tables
 Base.metadata.create_all(bind=engine)

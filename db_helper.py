@@ -1,20 +1,21 @@
+from sqlalchemy import (
+    create_engine,
+    Column,
+    Integer,
+    String,
+    Float,
+    Boolean,
+    ForeignKey,
+    Text,
+    DateTime,
+    Enum,
+    Table,
+)
+from sqlalchemy.orm import relationship, sessionmaker, declarative_base
+from sqlalchemy.sql import func
+import enum
 import os
 from dotenv import load_dotenv
-
-from sqlalchemy import create_engine, Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-
-Base = declarative_base()
-
-
-# Define your OrderTracking table class
-class OrderTracking(Base):
-    __tablename__ = 'order_tracking'
-
-    order_id = Column(Integer, primary_key=True)
-    status = Column(String)
-
 
 # Load environment variables from .env file
 load_dotenv()
@@ -22,9 +23,9 @@ load_dotenv()
 # Access the password from environment variable
 db_password = os.getenv("DB_PASSWORD")
 
-# Create an engine using pymysql
-engine = create_engine(
-    f"mysql+mysqlconnector://avnadmin:{db_password}@mysql-chatcuisine.e.aivencloud.com:17612/chatcuisine")
+# Database connection URL
+# DATABASE_URL = "mysql+pymysql://root@localhost/chatcuisine"
+DATABASE_URL = f"mysql+pymysql://avnadmin:{db_password}@mysql-chatcuisine.e.aivencloud.com:17612/chatcuisine"
 
 
 # Create a session maker

@@ -3,3 +3,5 @@ __pycache__
 .vercel
 .env
 .venv
+admin_setup.py
+user_setup.py

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Food Items</title>
+</head>
+<body>
+    <h1>Food Items</h1>
+    <ul>
+        {% for food_item in food_items %}
+            <li>{{ food_item.name }} - {{ food_item.price }}</li>
+        {% endfor %}
+    </ul>
+    <a href="/create-food-item">Add a new food item</a>
+</body>
+</html>

@@ -7,6 +7,10 @@ from fastapi.staticfiles import StaticFiles
 import db_helper
 import os
 import logging
+from passlib.context import CryptContext
+import db_helper
+from db_helper import FoodItem, SessionLocal, User
+from jose import JWTError, jwt
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -16,12 +20,16 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Get the secret key from environment variables
+load_dotenv()
 SECRET_KEY = os.getenv("SESSION_SECRET_KEY")
 if not SECRET_KEY:
     raise ValueError("No SESSION_SECRET_KEY set for Flask application")
 
 # Add the SessionMiddleware with the secret key
 app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
+
+# Password hashing context
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 class WebhookRequest(BaseModel):

@@ -6,6 +6,7 @@ SQLAlchemy
 databases
 asyncpg
 
+PyMySQL
 starlette
 python-dotenv
 itsdangerous

@@ -138,22 +138,34 @@ def track_order(params: dict):
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-fake_users_db = {"alok": {"username": "alok", "password": "alok"}}
-
 
 @app.get("/", response_class=HTMLResponse)
 async def login_page(request: Request):
     user = request.session.get("user")
+    is_admin = request.session.get("is_admin")
     if user:
+        if is_admin:
+            return RedirectResponse("/admin", status_code=302)
         return RedirectResponse("/index", status_code=302)
     return templates.TemplateResponse("login.html", {"request": request})
 
 
 @app.post("/", response_class=HTMLResponse)
-async def login(request: Request, username: str = Form(...), password: str = Form(...)):
-    user = fake_users_db.get(username)
-    if user and user["password"] == password:
-        request.session["user"] = user["username"]
+async def login(
+    request: Request,
+    db: Session = Depends(get_db),
+    username: str = Form(...),
+    password: str = Form(...),
+):
+    user = db.query(User).filter(User.username == username).first()
+    if user and verify_password(password, user.hashed_password):
+        request.session["user"] = user.username
+        request.session["is_admin"] = user.is_admin
+        role = "admin" if user.is_admin else "user"
+        token = create_jwt_token(user.username, role)
+        request.session["token"] = token  # Store the token in the session
+        if user.is_admin:
+            return RedirectResponse("/admin", status_code=302)
         return RedirectResponse("/index", status_code=302)
     return templates.TemplateResponse(
         "login.html", {"request": request, "error": "Invalid credentials"}

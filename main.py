@@ -37,6 +37,60 @@ class WebhookRequest(BaseModel):
     queryResult: dict
 
 
+# JWT token related functions
+def create_jwt_token(username: str, role: str) -> str:
+    payload = {"sub": username, "role": role}
+    token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+    return token
+
+
+def decode_jwt_token(token: str) -> dict:
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        return payload
+    except JWTError as e:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+
+def get_current_user(request: Request):
+    token = request.session.get("token")
+    if token:
+        try:
+            payload = decode_jwt_token(token)
+            username = payload.get("sub")
+            role = payload.get("role")
+            return username, role
+        except JWTError as e:
+            raise HTTPException(status_code=401, detail="Invalid token")
+    return None, None
+
+
+# Restrict access to admin-only endpoints
+def admin_only(request: Request):
+    _, role = get_current_user(request)
+    if role != "admin":
+        raise HTTPException(
+            status_code=403, detail="Only admins can access this feature"
+        )
+
+
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
+
+
+def get_password_hash(password):
+    return pwd_context.hash(password)
+
+
+# Define your get_db function to obtain a database session
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
 def handle_order_add(params: dict, session_id: str):
     return f"Adding {params['item']} to order for session {session_id}"
 

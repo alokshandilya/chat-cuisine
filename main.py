@@ -1,10 +1,11 @@
-from fastapi import FastAPI, HTTPException, Request, Form
+from fastapi import FastAPI, HTTPException, Request, Form, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 from pydantic import BaseModel
 from fastapi.staticfiles import StaticFiles
-import db_helper
+from sqlalchemy.orm import Session
+from dotenv import load_dotenv
 import os
 import logging
 from passlib.context import CryptContext
@@ -120,7 +121,6 @@ async def webhook_handler(request: WebhookRequest):
         else:
             raise HTTPException(status_code=400, detail="Invalid intent")
     except Exception as e:
-        logger.error(f"Error processing webhook: {e}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -193,11 +193,117 @@ async def logout(request: Request):
 
 
 @app.get("/index", response_class=HTMLResponse)
-async def read_root(request: Request):
-    user = request.session.get("user")
-    if not user:
+async def read_root(request: Request, db: Session = Depends(get_db)):
+    username = request.session.get("user")
+    if not username:
         return RedirectResponse("/", status_code=302)
-    return templates.TemplateResponse("index.html", {"request": request, "user": user})
+
+    user = db.query(User).filter(User.username == username).first()
+    full_name = user.full_name if user else None
+
+    food_items = db.query(FoodItem).all()
+    return templates.TemplateResponse(
+        "index.html",
+        {
+            "request": request,
+            "user": username,
+            "full_name": full_name,
+            "food_items": food_items,
+        },
+    )
+
+
+@app.get("/admin", response_class=HTMLResponse)
+async def admin_dashboard(request: Request, db: Session = Depends(get_db)):
+    username = request.session.get("user")
+    is_admin = request.session.get("is_admin")
+    if not username or not is_admin:
+        return RedirectResponse("/", status_code=302)
+
+    user = db.query(User).filter(User.username == username).first()
+    if not user or not user.is_admin:
+        return RedirectResponse("/", status_code=302)
+
+    return templates.TemplateResponse(
+        "admin_dashboard.html", {"request": request, "full_name": user.full_name}
+    )
+
+
+@app.get("/create-food-item", response_class=HTMLResponse)
+async def create_food_item_form(request: Request):
+    admin_only(request)
+    return templates.TemplateResponse("create_food_item.html", {"request": request})
+
+
+@app.post("/create-food-item", response_class=HTMLResponse)
+async def create_food_item(
+    request: Request,
+    name: str = Form(...),
+    description: str = Form(None),
+    price: float = Form(...),
+    image_url: str = Form(...),
+    db: Session = Depends(get_db),
+):
+    admin_only(request)
+    image_path = f"/static/images/{image_url}"
+    new_food_item = FoodItem(
+        name=name, description=description, price=price, image_url=image_path
+    )
+    db.add(new_food_item)
+    db.commit()
+    db.refresh(new_food_item)
+    return RedirectResponse(url="/food-items", status_code=303)
+
+
+@app.post("/remove-food-item/{item_id}")
+async def remove_food_item(
+    request: Request, item_id: int, db: Session = Depends(get_db)
+):
+    admin_only(request)
+    food_item = db.query(FoodItem).filter(FoodItem.id == item_id).first()
+    if food_item:
+        db.delete(food_item)
+        db.commit()
+    return RedirectResponse(url="/food-items", status_code=303)
+
+
+@app.get("/food-items", response_class=HTMLResponse)
+def list_food_items(request: Request, db: Session = Depends(get_db)):
+    food_items = db.query(FoodItem).all()
+    return templates.TemplateResponse(
+        "food_items.html", {"request": request, "food_items": food_items}
+    )
+
+
+@app.get(
+    "/create-user", response_class=HTMLResponse, dependencies=[Depends(admin_only)]
+)
+async def create_user_form(request: Request):
+    return templates.TemplateResponse("create_user.html", {"request": request})
+
+
+@app.post(
+    "/create-user", response_class=HTMLResponse, dependencies=[Depends(admin_only)]
+)
+async def create_user(
+    request: Request,
+    db: Session = Depends(get_db),
+    username: str = Form(...),
+    email: str = Form(...),
+    full_name: str = Form(...),
+    password: str = Form(...),
+):
+    hashed_password = get_password_hash(password)
+    new_user = User(
+        username=username,
+        email=email,
+        full_name=full_name,
+        hashed_password=hashed_password,
+    )
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return RedirectResponse("/admin", status_code=302)
 
 
 @app.get("/google721ed54125969664.html", response_class=HTMLResponse)

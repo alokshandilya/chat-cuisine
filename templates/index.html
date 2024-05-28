@@ -278,7 +278,7 @@
     <section class="container">
       <div class="row py-lg-5">
         <div class="col-lg-6 col-md-8 mx-auto">
-          <h1 class="fw-light">Hi, {{user}}</h1>
+          <h1 class="fw-light">Hi, {{full_name}}</h1>
           <h1 class="fw-light">View Cart, Track Order</h1>
           <p class="lead text-body-secondary">Feel free to use our ChatCuisine AI bot for the same<br>
           </p>
@@ -295,12 +295,13 @@
       <div class="container">
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+          {% for item in food_items %}
           <div class="col">
             <div class="card shadow-sm">
-              <img class="card-img-top" width="100%" height="225" src="/static/images/1-pavBhaji.jpg" alt="Pav Bhaji">
+              <img class="card-img-top" width="100%" height="225" src="{{ item.image_url }}" alt="{{ item.name }}">
               <div class="card-body">
-                <h4 class="card-title dark-text-color"><strong>Pav Bhaji (&#8377;60)</strong></h4>
-                <p class="card-text">A spicy blend of mashed vegetables served with buttered bread rolls.</p>
+                <h4 class="card-title dark-text-color"><strong>{{ item.name }} (&#8377;{{ item.price }})</strong></h4>
+                <p class="card-text">{{ item.description }}.</p>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fas fa-shopping-cart">
@@ -311,151 +312,7 @@
               </div>
             </div>
           </div>
-          <div class="col">
-            <div class="card shadow-sm">
-              <img class="card-img-top" width="100%" height="225" src="/static/images/2-choleBhature.jpg"
-                alt="Chole Bhature">
-              <div class="card-body">
-                <h4 class="card-title dark-text-color"><strong>Chole Bhature (&#8377;50)</strong></h4>
-                <p class="card-text">A hearty, spicy chickpea curry paired with deep-fried bread.</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fas fa-shopping-cart">
-                        +</i></button>
-                  </div>
-                  <small class="text-body-secondary">Ratings: x <i class="fas fa-star"></i> </small>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card shadow-sm">
-              <img class="card-img-top" width="100%" height="225" src="/static/images/3-pizza.jpg" alt="Pizza">
-              <div class="card-body">
-                <h4 class="card-title dark-text-color"><strong>Pizza (&#8377;150)</strong></h4>
-                <p class="card-text">A savory dish with a dough base topped with sauce, cheese, and various toppings.
-                </p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fas fa-shopping-cart">
-                        +</i></button>
-                  </div>
-                  <small class="text-body-secondary">Ratings: x <i class="fas fa-star"></i></small>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card shadow-sm">
-              <img class="card-img-top" width="100%" height="225" src="/static/images/4-mangoLassi.jpg"
-                alt="Mango Lassi">
-              <div class="card-body">
-                <h4 class="card-title dark-text-color"><strong>Mango Lassi (&#8377;40)</strong></h4>
-                <p class="card-text">A refreshing yogurt-based drink blended with sweet mangoes.</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fas fa-shopping-cart">
-                        +</i></button>
-                  </div>
-                  <small class="text-body-secondary">Ratings: x <i class="fas fa-star"></i></small>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card shadow-sm">
-              <img class="card-img-top" width="100%" height="225" src="/static/images/5-masalaDosa.jpg"
-                alt="Masala Dosa">
-              <div class="card-body">
-                <h4 class="card-title dark-text-color"><strong>Masala Dosa (&#8377;50)</strong></h4>
-                <p class="card-text">
-                  A crispy, thin pancake filled with a spiced potato mixture, served with chutneys and sambar.
-                </p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fas fa-shopping-cart">
-                        +</i></button>
-                  </div>
-                  <small class="text-body-secondary">Ratings: x <i class="fas fa-star"></i></small>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card shadow-sm">
-              <img class="card-img-top" width="100%" height="225" src="/static/images/6-vegetableBiryani.jpg"
-                alt="Vegetable Biryani">
-              <div class="card-body">
-                <h4 class="card-title dark-text-color"><strong>Vegetable Biryani (&#8377;60)</strong></h4>
-                <p class="card-text">
-                  A fragrant rice dish cooked with mixed vegetables and aromatic spices.
-                </p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fas fa-shopping-cart">
-                        +</i></button>
-                  </div>
-                  <small class="text-body-secondary">Ratings: x <i class="fas fa-star"></i></small>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card shadow-sm">
-              <img class="card-img-top" width="100%" height="225" src="/static/images/7-vadaPav.jpg" alt="Vada Pav">
-              <div class="card-body">
-                <h4 class="card-title dark-text-color"><strong>Vada Pav (&#8377;25)</strong></h4>
-                <p class="card-text">
-                  A popular Mumbai street food featuring a spicy potato fritter in a bun.
-                </p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fas fa-shopping-cart">
-                        +</i></button>
-                  </div>
-                  <small class="text-body-secondary">Ratings: x <i class="fas fa-star"></i></small>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card shadow-sm">
-              <img class="card-img-top" width="100%" height="225" src="/static/images/8-ravaDosa.jpg" alt="Rava Dosa">
-              <div class="card-body">
-                <h4 class="card-title dark-text-color"><strong>Rava Dosa (&#8377;45)</strong></h4>
-                <p class="card-text">
-                  A crispy, thin crepe made from semolina and rice flour, often filled with savory ingredients.
-                </p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fas fa-shopping-cart">
-                        +</i></button>
-                  </div>
-                  <small class="text-body-secondary">Ratings: x <i class="fas fa-star"></i></small>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card shadow-sm">
-              <img class="card-img-top" width="100%" height="225" src="/static/images/9-samosa.jpg" alt="Samosa">
-              <div class="card-body">
-                <h4 class="card-title dark-text-color"><strong>Samosa (&#8377;15)</strong></h4>
-                <p class="card-text">
-                  A fried or baked pastry with a spicy potato filling, typically triangular in shape.
-                </p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fas fa-shopping-cart">
-                        +</i></button>
-                  </div>
-                  <small class="text-body-secondary">Ratings: x <i class="fas fa-star"></i></small>
-                </div>
-              </div>
-            </div>
-          </div>
+          {% endfor %}
         </div>
       </div>
     </div>

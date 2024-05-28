@@ -172,6 +172,20 @@ async def login(
     )
 
 
+def get_current_admin_user(request: Request, db: Session = Depends(get_db)):
+    username = request.session.get("user")
+    if not username:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated"
+        )
+    user = db.query(User).filter(User.username == username).first()
+    if not user or not user.is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized"
+        )
+    return user
+
+
 @app.get("/logout")
 async def logout(request: Request):
     request.session.pop("user", None)

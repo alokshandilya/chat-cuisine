@@ -5,6 +5,7 @@ mysql-connector-python
 SQLAlchemy
 databases
 asyncpg
+bcrypt
 
 PyMySQL
 passlib

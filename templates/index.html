@@ -319,7 +319,6 @@
   </main>
 
   <footer class="footer">
-    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
     <df-messenger intent="WELCOME" chat-title="chat-cuisine-bot" agent-id="1d097414-4293-48a5-ba46-00df4a8aae1b"
       language-code="en"></df-messenger>
     <div class="container text-center">
@@ -331,6 +330,64 @@
     </div>
   </footer>
 
+    <!-- Dynamically load Dialogflow Messenger with customized theme -->
+  <script>
+    // Function to load Dialogflow Messenger
+    function loadDialogflowMessenger(theme) {
+      var dfMessengerScript = document.createElement('script');
+      dfMessengerScript.src = 'https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1';
+      dfMessengerScript.setAttribute('data-agent-id', '1d097414-4293-48a5-ba46-00df4a8aae1b');
+      dfMessengerScript.setAttribute('data-language-code', 'en');
+
+      // Set CSS variables for the chatbot theme
+      document.documentElement.style.setProperty('--df-messenger-bot-message', theme.botMessageColor);
+      document.documentElement.style.setProperty('--df-messenger-button-titlebar-color', theme.buttonTitlebarColor);
+      document.documentElement.style.setProperty('--df-messenger-button-titlebar-font-color', theme.buttonTitlebarFontColor);
+      document.documentElement.style.setProperty('--df-messenger-chat-background-color', theme.chatBackgroundColor);
+      document.documentElement.style.setProperty('--df-messenger-font-color', theme.fontColor);
+      document.documentElement.style.setProperty('--df-messenger-input-box-color', theme.inputBoxColor);
+      document.documentElement.style.setProperty('--df-messenger-input-font-color', theme.inputFontColor);
+      document.documentElement.style.setProperty('--df-messenger-input-placeholder-font-color', theme.inputPlaceholderFontColor);
+      document.documentElement.style.setProperty('--df-messenger-minimized-chat-close-icon-color', theme.minimizedChatCloseIconColor);
+      document.documentElement.style.setProperty('--df-messenger-send-icon', theme.sendIconColor);
+      document.documentElement.style.setProperty('--df-messenger-user-message', theme.userMessageColor);
+
+      document.body.appendChild(dfMessengerScript);
+    }
+
+    // Determine the current theme and load Dialogflow Messenger with the appropriate theme
+    var currentTheme = localStorage.getItem('theme');
+    if (currentTheme === 'dark') {
+      loadDialogflowMessenger({
+        botMessageColor: '#212529', // Dark color for bot messages
+        buttonTitlebarColor: '#212529', // Dark color for button and titlebar
+        buttonTitlebarFontColor: '#ffffff', // Font color for title in titlebar
+        chatBackgroundColor: '#2B3035', // Dark color for chat background
+        fontColor: '#ffffff', // Light color for font
+        inputBoxColor: '#212529', // Dark color for input box
+        inputFontColor: '#ffffff', // Light color for input font
+        inputPlaceholderFontColor: '#999999', // Light color for placeholder text in input box
+        minimizedChatCloseIconColor: '#ffffff', // Light color for close icon in minimized chat
+        sendIconColor: '#ffffff', // Light color for send icon
+        userMessageColor: '#2962ff' // Color for user messages
+      });
+    } else {
+      // Default to light theme if theme is not set or set to 'light' or 'auto'
+      loadDialogflowMessenger({
+        botMessageColor: '#ffffff', // Light color for bot messages
+        buttonTitlebarColor: '#2962ff', // Light color for button and titlebar
+        buttonTitlebarFontColor: '#ffffff', // Font color for title in titlebar
+        chatBackgroundColor: '#f2f2f2', // Light color for chat background
+        fontColor: '#000000', // Dark color for font
+        inputBoxColor: '#ffffff', // Light color for input box
+        inputFontColor: '#000000', // Dark color for input font
+        inputPlaceholderFontColor: '#999999', // Dark color for placeholder text in input box
+        minimizedChatCloseIconColor: '#000000', // Dark color for close icon in minimized chat
+        sendIconColor: '#000000', // Dark color for send icon
+        userMessageColor: '#2962ff' // Color for user messages
+      });
+    }
+  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
     integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"

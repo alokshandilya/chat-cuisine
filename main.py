@@ -188,7 +188,7 @@ def get_current_admin_user(request: Request, db: Session = Depends(get_db)):
 
 @app.get("/logout")
 async def logout(request: Request):
-    request.session.pop("user", None)
+    request.session.clear()
     return RedirectResponse("/", status_code=302)
 
 

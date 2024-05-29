@@ -1,15 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Food Items</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Additional styling */
+        body {
+            background-color: #2B3035;
+            color: #DEE2E6;
+        }
+
+        .container {
+            margin-top: 50px;
+            max-width: 600px;
+        }
+
+        .card {
+            background-color: #343a40;
+            border-color: #343a40;
+            /* Same color as background for borderless effect */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #007bff;
+            color: #DEE2E6;
+            border-bottom: none;
+            /* Remove default border-bottom */
+            border-top-left-radius: 10px;
+            /* Adjust border radius for the header */
+            border-top-right-radius: 10px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .list-group-item {
+            background-color: #495057;
+            color: #DEE2E6;
+            border: none;
+            border-bottom: 1px solid #343a40;
+        }
+
+        .list-group-item:last-child {
+            border-bottom: none;
+        }
+
+        .badge {
+            background-color: #007bff;
+            color: #DEE2E6;
+        }
+
+        .add-food-item {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #DEE2E6;
+            border: none;
+            width: 100%;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Food Items</h1>
-    <ul>
-        {% for food_item in food_items %}
-            <li>{{ food_item.name }} - {{ food_item.price }}</li>
-        {% endfor %}
-    </ul>
-    <a href="/create-food-item">Add a new food item</a>
+    <div class="container">
+        <div class="card">
+            <div class="card-header text-center">
+                <h2 class="mb-0"><em>Food Items</em></h2>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for food_item in food_items %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>{{ food_item.name }}</span>
+                            <span class="badge badge-primary badge-pill">{{ food_item.price }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <a href="/create-food-item" class="btn btn-primary add-food-item"><i class="fas fa-plus"></i> Add a new food item</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

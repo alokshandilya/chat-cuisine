@@ -23,9 +23,10 @@ load_dotenv()
 # Access the password from environment variable
 db_password = os.getenv("DB_PASSWORD")
 
-# Database connection URL
-# DATABASE_URL = "mysql+pymysql://root@localhost/chatcuisine"
-DATABASE_URL = f"mysql+pymysql://avnadmin:{db_password}@mysql-chatcuisine.e.aivencloud.com:17612/chatcuisine"
+# Create an engine using pymysql
+engine = create_engine(
+    f"mysql+mysqlconnector://avnadmin:{db_password}@mysql-chatcuisine.e.aivencloud.com:17612/chatcuisine"
+)
 
 # Create engine and session local
 engine = create_engine(DATABASE_URL, echo=True)

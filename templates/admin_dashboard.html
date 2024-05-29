@@ -3,14 +3,16 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Food Item</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Admin Dashboard</title>
   <!-- Bootstrap CSS -->
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
     body.dark-mode {
       background-color: #2B3035;
-      color: #ffffff;
+      color: #DEE2E6;
     }
 
     .dark-mode .card {
@@ -35,33 +37,49 @@
     .dark-mode .btn-link.text-danger {
       color: #ff4c4c;
     }
+
+    /* Additional styling for toggle button */
+    #toggle-dark-mode {
+      color: #DEE2E6;
+      /* Button text color */
+      background-color: #2B3035;
+      /* Button background color */
+      border-color: #DEE2E6;
+      /* Button border color */
+    }
+
+    #toggle-dark-mode:hover {
+      color: #2B3035;
+      /* Button text color on hover */
+      background-color: #DEE2E6;
+      /* Button background color on hover */
+    }
   </style>
 </head>
 
 <body class="dark-mode">
-  <div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-6">
-        <form action="/create-food-item" method="post">
-          <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+  <div class="container">
+    <div class="row justify-content-center mt-5">
+      <div class="col-12 col-md-8">
+        <div class="card">
+          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h1 class="h5 mb-0"><em>Welcome, {{ full_name }}</em></h1>
+            <button id="toggle-dark-mode" class="btn btn-light btn-sm"><i class="fas fa-moon"></i> Toggle Dark
+              Mode</button>
           </div>
-          <div class="form-group">
-            <label for="description">Description:</label>
-            <textarea class="form-control" id="description" name="description"></textarea>
+          <div class="card-body">
+            <ul class="list-group">
+              <li class="list-group-item"><a href="/create-food-item" class="btn btn-link fw-bold"
+                  style="font-size: 18px"><strong>Create Food Item</strong></a></li>
+              <li class="list-group-item"><a href="/food-items" class="btn btn-link"
+                  style="font-size: 18px"><strong>List Food Items</strong></a></li>
+              <li class="list-group-item"><a href="/create-user" class="btn btn-link"
+                  style="font-size: 18px"><strong>Create User</strong></a></li>
+              <li class="list-group-item"><a href="/logout" class="btn btn-link text-danger"
+                  style="font-size: 18px">Logout</a></li>
+            </ul>
           </div>
-          <div class="form-group">
-            <label for="price">Price:</label>
-            <input type="number" step="0.01" class="form-control" id="price" name="price" required>
-          </div>
-          <div class="form-group">
-            <label for="image_url">Image URL (relative to /static/images/):</label>
-            <input type="text" class="form-control" id="image_url" name="image_url" placeholder="e.g., 1-pavBhaji.jpg"
-              required>
-          </div>
-          <button type="submit" class="btn btn-primary">Create Food Item</button>
-        </form>
+        </div>
       </div>
     </div>
   </div>

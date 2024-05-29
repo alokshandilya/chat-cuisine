@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:strongk="http://www.w3.org/1999/html">
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Admin Dashboard</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
     <style>
         body.dark-mode {
             background-color: #2B3035;
@@ -32,11 +35,11 @@
 <body class="dark-mode">
     <div class="container">
         <div class="row justify-content-center mt-5">
-            <div class="col-md-8">
+            <div class="col-lg-8 col-md-10 col-sm-12">
                 <div class="card">
                     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                         <h1 class="h3 mb-0"><strong>Welcome, {{ full_name }}</strong></h1>
-                        <button id="toggle-dark-mode" class="btn btn-light">Toggle Dark Mode</button>
+                        <button id="toggle-dark-mode" class="btn btn-light btn-sm">Toggle Dark Mode</button>
                     </div>
                     <div class="card-body">
                         <ul class="list-group">

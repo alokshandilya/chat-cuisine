@@ -297,8 +297,8 @@ def get_order_status(order_id):
         return None
 
 
-# if __name__ == "__main__":
-#     # create_get_total_order_price_function()
+if __name__ == "__main__":
+    create_get_total_order_price_function()
 #     # print(get_total_order_price(56))
 #     # create_insert_order_item_function()
 #     # insert_order_item(1, 3, 1)

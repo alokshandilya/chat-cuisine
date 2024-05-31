@@ -35,11 +35,6 @@ app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-class WebhookRequest(BaseModel):
-    responseId: str
-    queryResult: dict
-
-
 # JWT token related functions
 def create_jwt_token(username: str, role: str) -> str:
     payload = {"sub": username, "role": role}
@@ -94,40 +89,45 @@ def get_db():
         db.close()
 
 
-def handle_order_add(params: dict, session_id: str):
-    return f"Adding {params['item']} to order for session {session_id}"
-
-
-def handle_order_remove(params: dict, session_id: str):
-    return f"Removing {params['item']} from order for session {session_id}"
-
-
 @app.post("/webhook")
-async def webhook_handler(request: WebhookRequest):
-    try:
-        query_result = request.queryResult
-        intent_name = query_result["intent"]["displayName"]
-        session_id = (
-            query_result.get("outputContexts", [{}])[0].get("name", "").split("/")[-1]
-        )
+async def handle_request(request: Request):
+    # Retrieve the JSON data from the request
+    payload = await request.json()
 
-        if intent_name == "order.add":
-            params = query_result["parameters"]
-            return {"fulfillmentText": handle_order_add(params, session_id)}
-        elif intent_name == "order.remove":
-            params = query_result["parameters"]
-            return {"fulfillmentText": handle_order_remove(params, session_id)}
-        elif intent_name == "track.order - context: ongoing-tracking":
-            params = query_result["parameters"]
-            return {"fulfillmentText": track_order(params)}
-        else:
-            raise HTTPException(status_code=400, detail="Invalid intent")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Internal Server Error")
+    # Extract the necessary information from the payload
+    # based on the structure of the WebhookRequest from Dialogflow
+    intent = payload["queryResult"]["intent"]["displayName"]
+    parameters = payload["queryResult"]["parameters"]
+    output_contexts = payload["queryResult"]["outputContexts"]
+    session_id = generic_helper.extract_session_id(output_contexts[0]["name"])
+
+    intent_handler_dict = {
+        "order.add - context: ongoing-order": add_to_order,
+        "order.remove - context: ongoing-order": remove_from_order,
+        "order.complete - context: ongoing-order": complete_order,
+        "track.order - context: ongoing-tracking": track_order,
+    }
+
+    return intent_handler_dict[intent](parameters, session_id)
 
 
-def track_order(params: dict):
-    order_id = int(params["number"])
+def save_to_db(order_items: dict):
+    next_order_id = db_helper.get_next_order_id()
+
+    # Insert individual items along with quantity in order_items table
+    for food_item, quantity in order_items.items():
+        rcode = db_helper.insert_order_item(food_item, quantity, next_order_id)
+        if rcode == -1:
+            return -1
+
+    # Now insert order tracking status
+    db_helper.insert_order_tracking(next_order_id, "Order Received, it's in processing")
+    return next_order_id
+
+
+
+def track_order(parameters: dict):
+    order_id = int(parameters["number"])
     order_status = db_helper.get_order_status(order_id)
     if order_status:
         fullfillmentText = (

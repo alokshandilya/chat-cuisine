@@ -10,6 +10,7 @@ from sqlalchemy import (
     DateTime,
     Enum,
     Table,
+    text,
 )
 from sqlalchemy.orm import relationship, sessionmaker, declarative_base
 from sqlalchemy.sql import func
@@ -25,8 +26,8 @@ db_password = os.getenv("DB_PASSWORD")
 
 # Create an engine using pymysql
 engine = create_engine(
-    f"mysql+mysqlconnector://avnadmin:{db_password}@mysql-chatcuisine.e.aivencloud.com:17612/chatcuisine"
-    # f"mysql+mysqlconnector://root@localhost/chatcuisine"
+    # f"mysql+mysqlconnector://avnadmin:{db_password}@mysql-chatcuisine.e.aivencloud.com:17612/chatcuisine"
+    f"mysql+mysqlconnector://root@localhost/chatcuisine"
 )
 
 # Create engine and session local
@@ -272,11 +273,35 @@ def get_total_order_price(order_id):
 
 def get_next_order_id():
     try:
-        tracking = (
-            session.query(OrderTracking)
-            .filter(OrderTracking.order_id == order_id)
-            .first()
-        )
-        return tracking.status.value if tracking else None
-    finally:
-        session.close()
+        with engine.connect() as connection:
+            # Executing the SQL query to get the next available order_id
+            query = text("SELECT MAX(id) FROM orders")
+            result = connection.execute(query).fetchone()[0]
+            # Returning the next available order_id
+            return 1 if result is None else result + 1
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
+
+
+def get_order_status(order_id):
+    try:
+        with engine.connect() as connection:
+            # Executing the SQL query to fetch the order status
+            query = text("SELECT status FROM order_tracking WHERE order_id = :order_id")
+            result = connection.execute(query, {"order_id": order_id}).fetchone()
+            # Returning the order status
+            return result[0] if result else None
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
+
+
+if __name__ == "__main__":
+    # create_get_total_order_price_function()
+    # print(get_total_order_price(56))
+    # create_insert_order_item_function()
+    # insert_order_item(1, 3, 1)
+    # insert_order_item('Pav Bhaji', 1, 99)
+    # insert_order_tracking(1, "processing")
+    print(get_next_order_id())

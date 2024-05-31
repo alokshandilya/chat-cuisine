@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException, Request, Form, Depends
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 from pydantic import BaseModel
@@ -10,11 +10,13 @@ import os
 import logging
 from passlib.context import CryptContext
 import db_helper
+import generic_helper
 from db_helper import FoodItem, SessionLocal, User
 from jose import JWTError, jwt
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
+inprogress_orders = {}
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

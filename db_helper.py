@@ -33,19 +33,6 @@ engine = create_engine(
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-
-def get_order_status(order_id):
-    # Create a session
-    session = Session()
-
-    # Query the database using SQLAlchemy ORM
-    status = session.query(OrderTracking.status).filter_by(order_id=order_id).scalar()
-
-    session.close()
-
-    return status
-
-
 # Association table for many-to-many relationship between orders and food items
 order_items = Table(
     "order_items",
@@ -158,9 +145,132 @@ class OrderTracking(Base):
 Base.metadata.create_all(bind=engine)
 
 
-# Function to get order status for tracking
-def get_order_status(order_id: int) -> str:
-    session = SessionLocal()
+def create_get_total_order_price_function():
+    create_function_sql = """
+    CREATE FUNCTION get_total_order_price(order_id INT) 
+    RETURNS DECIMAL(10, 2)
+    DETERMINISTIC
+    BEGIN
+        DECLARE total_price DECIMAL(10, 2);
+
+        SELECT SUM(oi.quantity * f.price) INTO total_price
+        FROM order_items oi
+        JOIN food_items f ON oi.food_item_id = f.id
+        WHERE oi.order_id = order_id;
+
+        RETURN IFNULL(total_price, 0.00);
+    END
+    """
+
+    try:
+        with engine.connect() as connection:
+            for statement in create_function_sql.split("DELIMITER ;"):
+                connection.execute(text(statement.strip()))
+            print("Function get_total_order_price created successfully!")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
+def create_insert_order_item_function():
+    # Remove the delimiter commands as they are not needed in Python execution
+    create_procedure_sql_cleaned = """
+    CREATE PROCEDURE insert_order_item(
+        IN p_food_item_id INT,
+        IN p_quantity INT,
+        IN p_order_id INT
+    )
+    BEGIN
+        INSERT INTO order_items (food_item_id, quantity, order_id)
+        VALUES (p_food_item_id, p_quantity, p_order_id);
+    END
+    """
+
+    try:
+        with engine.connect() as connection:
+            connection.execute(text(create_procedure_sql_cleaned))
+            print("Stored procedure insert_order_item created successfully!")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
+# Function to call the MySQL stored procedure and insert an order item
+def insert_order_item(food_item, quantity, order_id):
+    try:
+        with engine.connect() as connection:
+            # Begin a transaction
+            trans = connection.begin()
+            try:
+                # Fetching the food_item_id from the food_items table
+                result = connection.execute(
+                    text("SELECT id FROM food_items WHERE name = :food_item"),
+                    {"food_item": food_item},
+                ).fetchone()
+
+                if result is None:
+                    print(f"Food item '{food_item}' not found in the database")
+                    return -1
+
+                food_item_id = result[0]
+
+                # Calling the stored procedure with the fetched id
+                connection.execute(
+                    text("CALL insert_order_item(:food_item_id, :quantity, :order_id)"),
+                    {
+                        "food_item_id": food_item_id,
+                        "quantity": int(quantity),
+                        "order_id": order_id,
+                    },
+                )
+                # Committing the changes
+                trans.commit()
+                print("Order item inserted successfully")
+                return 1
+            except Exception as e:
+                # Rolling back the transaction in case of an error
+                trans.rollback()
+                print(f"An error occurred during transaction: {e}")
+                return -1
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return -1
+
+
+# Function to insert a record into the order_tracking table
+def insert_order_tracking(order_id, status):
+    try:
+        with engine.connect() as connection:
+            # Begin a transaction
+            trans = connection.begin()
+            try:
+                # Inserting the record into the order_tracking table
+                insert_query = "INSERT INTO order_tracking (order_id, status) VALUES (:order_id, :status)"
+                connection.execute(
+                    text(insert_query), {"order_id": order_id, "status": status}
+                )
+                # Committing the transaction
+                trans.commit()
+                print("Order tracking inserted successfully!")
+            except Exception as e:
+                # Rollback the transaction in case of an error
+                trans.rollback()
+                print(f"An error occurred during transaction: {e}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
+def get_total_order_price(order_id):
+    try:
+        with engine.connect() as connection:
+            # Executing the SQL query to get the total order price
+            query = text("SELECT get_total_order_price(:order_id)")
+            result = connection.execute(query, {"order_id": order_id}).fetchone()[0]
+            return result
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
+
+
+def get_next_order_id():
     try:
         tracking = (
             session.query(OrderTracking)

@@ -5,6 +5,10 @@
 
 updated frontend
 
+## Presentation
+
+<iframe src="https://gamma.app/embed/ciktag9i25oi9kk" style="width: 700px; max-width: 100%; height: 450px" allow="fullscreen" title="ChatCuisine"></iframe>
+
 ## Current Progress with Screenshots
 
 - deployment ✅

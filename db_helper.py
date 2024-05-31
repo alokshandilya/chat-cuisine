@@ -26,8 +26,8 @@ db_password = os.getenv("DB_PASSWORD")
 
 # Create an engine using pymysql
 engine = create_engine(
-    f"mysql+mysqlconnector://avnadmin:{db_password}@mysql-chatcuisine.e.aivencloud.com:17612/chatcuisine"
-    # f"mysql+mysqlconnector://root@localhost/chatcuisine"
+    # f"mysql+mysqlconnector://avnadmin:{db_password}@mysql-chatcuisine.e.aivencloud.com:17612/chatcuisine"
+    f"mysql+mysqlconnector://root@localhost/chatcuisine"
 )
 
 # Create engine and session local

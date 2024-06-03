@@ -1,7 +1,7 @@
 fastapi
 uvicorn
 pydantic
-mysql.connector
+mysql-connector-python
 SQLAlchemy
 databases
 asyncpg

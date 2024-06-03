@@ -17,6 +17,7 @@ from sqlalchemy.sql import func
 import enum
 import os
 from dotenv import load_dotenv
+from datetime import datetime
 
 # Load environment variables from .env file
 load_dotenv()
@@ -133,8 +134,7 @@ class OrderStatusEnum(enum.Enum):
 # OrderTracking table
 class OrderTracking(Base):
     __tablename__ = "order_tracking"
-    id = Column(Integer, primary_key=True, index=True)
-    order_id = Column(Integer, ForeignKey("orders.id"))
+    order_id = Column(Integer, ForeignKey("orders.id"), primary_key=True, index=True)
     status = Column(
         Enum(OrderStatusEnum), default=OrderStatusEnum.processing, nullable=False
     )
@@ -144,6 +144,34 @@ class OrderTracking(Base):
 
 # Create all tables
 Base.metadata.create_all(bind=engine)
+
+# Function to create a new order
+def create_order(user_id, total_amount):
+    try:
+        with engine.connect() as connection:
+            # Insert a new order
+            connection.execute(
+                text("""
+                    INSERT INTO orders (user_id, created_at, total_amount)
+                    VALUES (:user_id, :created_at, :total_amount)
+                """),
+                {
+                    "user_id": user_id,
+                    "created_at": datetime.now(),
+                    "total_amount": total_amount,
+                }
+            )
+            # Get the id of the newly created order
+            order_id = connection.execute(
+                text("SELECT LAST_INSERT_ID()")
+            ).fetchone()[0]
+
+            print(f"Order created successfully with ID: {order_id}")
+            return order_id
+    except Exception as e:
+        print(f"An error occurred while creating order: {e}")
+        return None
+
 
 
 def create_get_total_order_price_function():
@@ -218,7 +246,7 @@ def insert_order_item(food_item, quantity, order_id):
                     text("CALL insert_order_item(:food_item_id, :quantity, :order_id)"),
                     {
                         "food_item_id": food_item_id,
-                        "quantity": int(quantity),
+                        "quantity": quantity,
                         "order_id": order_id,
                     },
                 )
@@ -298,10 +326,10 @@ def get_order_status(order_id):
 
 
 if __name__ == "__main__":
-    create_get_total_order_price_function()
-    print(get_total_order_price(56))
-    create_insert_order_item_function()
-    insert_order_item(1, 3, 1)
-    insert_order_item('Pav Bhaji', 1, 99)
-    insert_order_tracking(1, "processing")
-    print(get_next_order_id())
+    # create_get_total_order_price_function()
+    # print(get_total_order_price(56))
+    # create_insert_order_item_function()
+    # insert_order_item(1, 3, 1)
+    insert_order_item('Pav Bhaji', 4, 2)
+    # insert_order_tracking(1, "processing")
+    # print(get_next_order_id())
